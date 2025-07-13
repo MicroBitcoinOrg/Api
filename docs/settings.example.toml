@@ -1,0 +1,31 @@
+[default]
+    [default.database]
+    endpoint = "postgresql+asyncpg://user:password@localhost:5432/mbcapi"
+
+    [default.blockchain]
+    endpoint = "http://user:password@host:port"
+    # 26464 - regtest
+    # 7575  - prod
+
+    [default.backend]
+    origins = [
+        "http://localhost:8000",
+        "http://localhost:3000",
+    ]
+
+
+[testing]
+    [testing.database]
+    endpoint = "postgresql+asyncpg://user:password@localhost:5432/mbcapi-tests"
+
+    [testing.blockchain]
+    endpoint = "http://user:password@host:port"
+    # 26464 - regtest
+    # 7575  - prod
+
+    [testing.backend]
+    origins = [
+        "http://localhost:8000",
+        "http://localhost:3000",
+    ]
+
