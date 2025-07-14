@@ -226,9 +226,7 @@ async def parse_block(height: int):
 
     block_data = block_data_result["result"]
 
-    transactions_data = await parse_transactions(
-        [] if height == 0 else block_data["tx"],
-    )
+    transactions_data = await parse_transactions(block_data["tx"])
 
     result["transactions"] = transactions_data["transactions"]
     result["outputs"] = transactions_data["outputs"]

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone, UTC
-from typing import Sequence
+from collections.abc import Sequence
+from typing import Any
 import math
 
 from app import constants
@@ -16,7 +17,7 @@ def to_timestamp(date: datetime | None) -> int | None:
 
 
 # Helper function for pagination
-def pagination(page, size=constants.DEFAULT_PAGINATION_SIZE):
+def pagination(page: int, size: int = constants.DEFAULT_PAGINATION_SIZE):
     """limit, offset = pagination(:page, :page_size)"""
     offset = (size * page) - size
 
@@ -24,7 +25,7 @@ def pagination(page, size=constants.DEFAULT_PAGINATION_SIZE):
 
 
 # Helper function to make pagination dict for api
-def pagination_dict(total, page, limit):
+def pagination_dict(total: int, page: int, limit: int) -> dict[str, int]:
     return {
         "pages": math.ceil(total / limit),
         "total": total,
@@ -32,7 +33,9 @@ def pagination_dict(total, page, limit):
     }
 
 
-def paginated_response(items: Sequence, total: int, page: int, limit: int) -> dict:
+def paginated_response(
+    items: Sequence[Any], total: int, page: int, limit: int
+) -> dict[str, Any]:
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": items,

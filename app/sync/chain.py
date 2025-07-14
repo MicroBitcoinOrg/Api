@@ -189,6 +189,7 @@ async def sync_chain():
             latest = await process_block(session, block_data)
 
             await session.commit()
+            print("Added genesis block")
 
         while True:
             latest_hash_data = await make_request(
