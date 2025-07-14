@@ -137,12 +137,8 @@ async def build_movements(
     }
 
 
-async def parse_transactions(txids: list[str], stake: bool = False):
+async def parse_transactions(txids: list[str]):
     settings = get_settings()
-
-    # Skip firt tx for pos blocks
-    if stake:
-        txids = txids[1:]
 
     transactions_result = await make_request(
         settings.blockchain.endpoint,  # type: ignore
@@ -162,6 +158,8 @@ async def parse_transactions(txids: list[str], stake: bool = False):
 
     for transaction_result in transactions_result:
         transaction_data = transaction_result["result"]
+        if transaction_data is None:
+            continue
 
         addresses = list(
             set(
@@ -227,10 +225,8 @@ async def parse_block(height: int):
 
     block_data = block_data_result["result"]
 
-    stake = block_data["flags"] == "proof-of-stake"
-
     transactions_data = await parse_transactions(
-        [] if height == 0 else block_data["tx"], stake
+        [] if height == 0 else block_data["tx"],
     )
 
     result["transactions"] = transactions_data["transactions"]
