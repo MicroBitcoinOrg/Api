@@ -51,7 +51,7 @@ async def parse_outputs(transaction_data: dict[str, Any]):
                 "shortcut": transaction_data["txid"] + ":" + str(vout["n"]),
                 "blockhash": transaction_data.get("blockhash"),
                 "txid": transaction_data["txid"],
-                "address": spk["addresses"][0],
+                "address": spk["address"],
                 "timelock": timelock,
                 "currency": currency,
                 "type": spk["type"],
@@ -106,6 +106,9 @@ async def build_movements(
 
     for transaction_result in input_transactions_result:
         transaction_data = transaction_result["result"]
+        if transaction_data is None:
+            continue
+
         vin_vouts = await parse_outputs(transaction_data)
 
         for vout in vin_vouts:
