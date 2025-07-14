@@ -106,8 +106,7 @@ async def build_movements(
 
     for transaction_result in input_transactions_result:
         transaction_data = transaction_result["result"]
-        if transaction_data is None:
-            continue
+        assert transaction_data
 
         vin_vouts = await parse_outputs(transaction_data)
 
@@ -161,8 +160,7 @@ async def parse_transactions(txids: list[str]):
 
     for transaction_result in transactions_result:
         transaction_data = transaction_result["result"]
-        if transaction_data is None:
-            continue
+        assert transaction_data
 
         addresses = list(
             set(
