@@ -164,9 +164,9 @@ async def parse_transactions(txids: list[str]):
 
         addresses = list(
             set(
-                address
+                vout["scriptPubKey"]["address"]
                 for vout in transaction_data["vout"]
-                for address in vout["scriptPubKey"].get("addresses", [])
+                if vout["scriptPubKey"]["type"] != "nulldata"
             )
         )
         timestamp = transaction_data.get("time", None)

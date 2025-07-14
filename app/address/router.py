@@ -1,10 +1,9 @@
 from app.utils import pagination, paginated_response
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends
 from app.dependencies import get_page
 from app.database import get_session
-from fastapi.params import Depends
 from app.address import service
-from fastapi import APIRouter
 
 from app.schemas import (
     TransactionPaginatedResponse,
@@ -16,9 +15,7 @@ from app.schemas import (
 router = APIRouter(prefix="/address", tags=["Addresses"])
 
 
-@router.get(
-    "/{address}/outputs/{currency}", response_model=OutputPaginatedResponse
-)
+@router.get("/{address}/outputs/{currency}", response_model=OutputPaginatedResponse)
 async def get_unspent_outputs(
     address: str,
     currency: str,
@@ -36,8 +33,26 @@ async def get_unspent_outputs(
 
 
 @router.get(
-    "/{address}/transactions", response_model=TransactionPaginatedResponse
+    "/{address}/utxo/{currency}",
+    summary="Get utxo for specified amount",
+    response_model=OutputPaginatedResponse,
 )
+async def get_utxo(
+    address: str,
+    currency: str,
+    amount: float,
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+):
+    limit, offset = pagination(page)
+
+    total = await service.count_utxo(session, address, currency, amount)
+    items = await service.list_utxo(session, address, currency, amount, limit, offset)
+
+    return paginated_response(items.all(), total, page, limit)
+
+
+@router.get("/{address}/transactions", response_model=TransactionPaginatedResponse)
 async def get_transactions(
     address: str,
     session: AsyncSession = Depends(get_session),
