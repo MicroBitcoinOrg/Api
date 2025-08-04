@@ -76,7 +76,6 @@ async def main():
                 end="\r",
                 flush=True,
             )
-            break
 
         print("\nDone")
 
