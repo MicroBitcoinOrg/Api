@@ -24,18 +24,15 @@ async def main():
         )
         limit = 100
 
-        offset = 0
         query = (
             select(Transaction.id, Transaction.txid)
-            .limit(limit)
             .filter(Transaction.addresses == ())
             .limit(limit)
         )
 
-        total /= limit
+        processed = 0
 
-        while txs := (await session.execute(query.offset(offset))).all():
-            offset += limit
+        while txs := (await session.execute(query)).all():
 
             transactions_result = await make_request(
                 settings.blockchain.endpoint,
@@ -71,8 +68,9 @@ async def main():
                 execution_options={"synchronize_session": False},
             )
             await session.commit()
+            processed += limit
             print(
-                f"Progress: {offset // limit}/{total} ({(offset // limit/total)*100:.2f})",
+                f"Progress: {processed}/{total} ({(processed/total)*100:.2f})",
                 end="\r",
                 flush=True,
             )
