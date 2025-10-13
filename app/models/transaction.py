@@ -2,13 +2,20 @@ from datetime import datetime
 
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import mapped_column, Mapped
-from sqlalchemy import String
+from sqlalchemy import Index, String
 
 from .base import Base
 
 
 class Transaction(Base):
     __tablename__ = "service_transactions"
+    __table_args__ = (
+        Index(
+            "ix_service_transactions_addresses",
+            "addresses",
+            postgresql_using="gin",
+        ),
+    )
 
     currencies: Mapped[list[str]] = mapped_column(ARRAY(String(64)), index=True)
     txid: Mapped[str] = mapped_column(String(64), index=True, unique=True)
