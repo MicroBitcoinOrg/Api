@@ -30,4 +30,4 @@ class Transaction(Base):
 
     amount: Mapped[dict[str, float]] = mapped_column(JSONB, default={})
 
-    coinbase: Mapped[bool]
+    coinbase: Mapped[bool] = mapped_column(nullable=True)
