@@ -88,6 +88,7 @@ class TransactionResponse(CustomModel):
     amount: dict[str, Satoshi]
     outputs: list[OutputFullResponse]
     inputs: list[InputFullResponse]
+    coinbase: bool
     confirmations: int
     fee: Satoshi
 

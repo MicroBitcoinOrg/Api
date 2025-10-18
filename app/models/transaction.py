@@ -29,3 +29,5 @@ class Transaction(Base):
     version: Mapped[int]
 
     amount: Mapped[dict[str, float]] = mapped_column(JSONB, default={})
+
+    coinbase: Mapped[bool]
