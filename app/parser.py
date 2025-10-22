@@ -161,6 +161,7 @@ async def parse_transactions(txids: list[str]):
     for transaction_result in transactions_result:
         transaction_data = transaction_result["result"]
         assert transaction_data
+        index = txids.index(transaction_data["txid"])
 
         addresses = list(
             set(
@@ -180,6 +181,8 @@ async def parse_transactions(txids: list[str]):
                 "locktime": transaction_data["locktime"],
                 "version": transaction_data["version"],
                 "timestamp": timestamp,
+                "index": index,
+                "coinbase": index == 0,
                 "size": transaction_data["size"],
                 "txid": transaction_data["txid"],
             }

@@ -72,6 +72,8 @@ async def process_block(session: AsyncSession, data: dict[str, Any]):
                     "size": transaction_data["size"],
                     "txid": transaction_data["txid"],
                     "currencies": transaction_currencies[transaction_data["txid"]],
+                    "coinbase": transaction_data["coinbase"],
+                    "block_index": transaction_data["index"],
                     "height": block.height,
                     "amount": {
                         currency: float(amount)

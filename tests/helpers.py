@@ -16,6 +16,7 @@ async def create_transaction(
     amount: dict[str, float] | None = None,
     blockhash: str | None = None,
     addresses: list[str] | None = None,
+    coinbase: bool = False,
 ) -> Transaction:
     if currencies is None:
         currencies = ["MBC"]
@@ -36,6 +37,7 @@ async def create_transaction(
         locktime=locktime,
         version=version,
         amount=amount,
+        coinbase=coinbase,
         addresses=addresses or [secrets.token_hex(32), secrets.token_hex(32)],
     )
 
